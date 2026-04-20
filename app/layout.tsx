@@ -1,31 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Candexa AI - Source & Hire Talents from Your Email",
-  description: "Candexa AI brings the future of work to your inbox with AI Agents that converts your email to an AI-Powered ATS in one click.",
+  title: "Candexa AI - Recruiter & Agency Marketplace",
+  description: "A growing community of talent professionals powered by Candexa AI.",
   icons: [{ url: "/favicon.ico" }],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en">
+      <body className={dmSans.className}>{children}</body>
     </html>
   );
 }
