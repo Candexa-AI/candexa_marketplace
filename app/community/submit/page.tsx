@@ -1,158 +1,185 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function SubmitProfile() {
+const NICHE_OPTIONS = [
+  "Technology & Engineering",
+  "Finance & Banking",
+  "Healthcare & Life Sciences",
+  "Sales & Marketing",
+  "Legal & Compliance",
+  "Product & Design",
+  "Executive & C-Suite",
+  "Operations & Supply Chain",
+  "Creative & Media",
+  "General / Multi-sector",
+  "Other",
+];
+
+export default function SubmitPage() {
   const router = useRouter();
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    agencyName: '',
-    website: '',
-    niche: '',
-    location: '',
-    description: '',
-  });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
-    const res = await fetch('/api/listings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
-    });
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      agencyName: formData.get("agencyName"),
+      website: formData.get("website") || undefined,
+      niche: formData.get("niche") || undefined,
+      description: formData.get("description") || undefined,
+    };
 
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/listings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) {
+        setError(json.message || "Something went wrong.");
+        return;
+      }
+
       setSuccess(true);
-      setTimeout(() => router.push('/community'), 1800);
-    } else {
-      alert('Failed to submit. Please check your inputs and try again.');
+    } catch {
+      setError("Failed to submit. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }
 
   if (success) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-100">
-          <div className="text-6xl mb-6">&#127881;</div>
-          <h2 className="text-3xl font-semibold text-[#1A1A1A] mb-3">Profile Submitted Successfully!</h2>
-          <p className="text-[#6B7280] mb-8">
-            Your profile is now live in the community as <strong>Unverified</strong>.
-          </p>
-          <button
-            onClick={() => router.push('/community')}
-            className="bg-[#FF823C] text-white px-10 py-4 rounded-3xl font-semibold hover:bg-[#FF823C]/90 transition-colors"
-          >
-            Back to Marketplace
-          </button>
+      <main className="page-root">
+        <div className="success-container">
+          <div className="success-card">
+            <div className="success-icon">🎉</div>
+            <h1>Profile Submitted!</h1>
+            <p>Your profile is now live in the community as <strong>Unverified</strong>.</p>
+            <div className="success-actions">
+              <button onClick={() => router.push("/community")} className="btn-primary">
+                Back to Marketplace
+              </button>
+            </div>
+          </div>
+          <style jsx>{`
+            .page-root { background: #f9fafb; min-height: 100vh; }
+            .success-container { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 64px); padding: 24px; }
+            .success-card { background: white; border-radius: 32px; border: 1px solid #f3f4f6; padding: 64px; text-align: center; max-width: 480px; }
+            .success-icon { font-size: 56px; margin-bottom: 20px; }
+            h1 { font-size: 28px; font-weight: 600; color: #1a1a1a; margin: 0 0 8px; }
+            p { font-size: 16px; color: #6b7280; margin: 0 0 32px; }
+            .btn-primary { background: #ff823c; color: white; padding: 16px 40px; border-radius: 32px; font-weight: 600; font-size: 15px; border: none; cursor: pointer; transition: background 0.15s; }
+            .btn-primary:hover { background: #ff823c/90; }
+          `}</style>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12">
-        <h1 className="text-4xl font-semibold text-[#1A1A1A] mb-2">Submit Your Profile</h1>
-        <p className="text-[#6B7280] mb-10">Join the Candexa AI Recruiter Community</p>
+    <main className="page-root">
+      <div className="form-container">
+        <div className="form-card">
+          <div className="form-header">
+            <h1>Submit Your Profile</h1>
+            <p>Join the Candexa AI Recruiter Community</p>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="relative">
-              <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Full Name</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                </span>
-                <input name="name" required value={form.name} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="John Doe" />
+          {error && <div className="error-banner">{error}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="John Doe" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="you@email.com" />
               </div>
             </div>
-            <div className="relative">
-              <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Email</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                </span>
-                <input name="email" type="email" required value={form.email} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="you@email.com" />
+
+            <div className="form-group">
+              <label htmlFor="agencyName">Agency / Company Name</label>
+              <input type="text" id="agencyName" name="agencyName" required placeholder="TalentSphere Recruitment" />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="website">Website</label>
+                <input type="url" id="website" name="website" placeholder="https://youragency.com" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="niche">Niche / Specialty</label>
+                <select id="niche" name="niche">
+                  <option value="">Select a niche</option>
+                  {NICHE_OPTIONS.map((n) => (
+                    <option key={n} value={n}>{n}</option>
+                  ))}
+                </select>
               </div>
             </div>
-          </div>
 
-          <div className="relative">
-            <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Agency / Company Name</label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-              </span>
-              <input name="agencyName" required value={form.agencyName} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="TalentSphere Recruitment" />
+            <div className="form-group">
+              <label htmlFor="description">Short Description</label>
+              <textarea id="description" name="description" rows={4} placeholder="Tell us about your expertise..." maxLength={500} />
+              <span className="char-count">Max 500 characters</span>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="relative">
-              <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Website</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
-                </span>
-                <input name="website" value={form.website} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="https://youragency.com" />
-              </div>
-            </div>
-            <div className="relative">
-              <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Location</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </span>
-                <input name="location" value={form.location} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="Lagos, Nigeria or Remote" />
-              </div>
-            </div>
-          </div>
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Profile"}
+            </button>
+          </form>
 
-          <div className="relative">
-            <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Niche / Specialty</label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
-              </span>
-              <input name="niche" value={form.niche} onChange={handleChange} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400" placeholder="Tech, Finance, Healthcare..." />
-            </div>
-          </div>
-
-          <div className="relative">
-            <label className="block text-xs font-semibold text-[#374151] uppercase tracking-wide mb-2">Short Description</label>
-            <div className="relative">
-              <span className="absolute left-4 top-4 text-gray-400">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h7" /></svg>
-              </span>
-              <textarea name="description" value={form.description} onChange={handleChange} rows={4} className="w-full pl-11 pr-4 py-3.5 bg-[#F9FAFB] border border-gray-200 rounded-2xl focus:bg-white focus:border-[#FF823C] focus:ring-2 focus:ring-[#FF823C]/20 transition-all outline-none text-[#1A1A1A] placeholder:text-gray-400 resize-none" placeholder="Tell us about your expertise..." />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#FF823C] hover:bg-[#FF6B2C] active:bg-[#E55A1A] disabled:opacity-70 disabled:cursor-not-allowed transition-all text-white font-semibold py-4 rounded-2xl text-base shadow-lg shadow-[#FF823C]/30 hover:shadow-xl hover:shadow-[#FF823C]/40 transform hover:-translate-y-0.5"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
-                Submitting Profile...
-              </span>
-            ) : 'Submit Profile'}
-          </button>
-        </form>
+          <p className="disclaimer">
+            Your email will never be displayed publicly.
+          </p>
+        </div>
       </div>
-    </div>
+
+      <style jsx>{`
+        .page-root { background: #f9fafb; min-height: 100vh; }
+        .form-container { max-width: 640px; margin: 0 auto; padding: 40px 24px 80px; }
+        .back-link { display: inline-block; font-size: 14px; color: #6b7280; text-decoration: none; font-weight: 500; margin-bottom: 24px; transition: color 0.15s; }
+        .back-link:hover { color: #1a1a1a; }
+        
+        .form-card { background: white; border: 1px solid #f3f4f6; border-radius: 32px; padding: 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .form-header { margin-bottom: 32px; text-align: center; }
+        .form-header h1 { font-size: 32px; font-weight: 600; color: #1a1a1a; margin: 0 0 8px; }
+        .form-header p { font-size: 16px; color: #6b7280; margin: 0; }
+
+        .error-banner { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; border-radius: 12px; padding: 14px 16px; font-size: 14px; margin-bottom: 24px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px 18px; font-size: 15px; color: #1a1a1a; background: #f9fafb; outline: none; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; font-family: inherit; box-sizing: border-box; }
+        input:focus, select:focus, textarea:focus { border-color: #ff823c; box-shadow: 0 0 0 3px rgba(255,130,60,0.15); background: white; }
+        input::placeholder, textarea::placeholder { color: #9ca3af; }
+        textarea { resize: vertical; min-height: 100px; }
+        .char-count { display: block; font-size: 12px; color: #9ca3af; margin-top: 6px; text-align: right; }
+
+        .submit-btn { width: 100%; background: #ff823c; color: white; border: none; border-radius: 24px; padding: 18px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s; font-family: inherit; margin-top: 8px; box-shadow: 0 4px 14px rgba(255,130,60,0.3); }
+        .submit-btn:hover:not(:disabled) { background: #ff6b2c; transform: translateY(-1px); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .disclaimer { font-size: 13px; color: #9ca3af; text-align: center; margin-top: 24px; }
+      `}</style>
+    </main>
   );
 }
