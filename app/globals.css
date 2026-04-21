@@ -1,5 +1,124 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "DM Sans", "sans-serif";
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-dm-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  /* Colors mapped from provided HTML */
+  --color-primary: #ff7a18;
+  --color-primary-hover: #e66a10;
+  
+  /* Primary Scale (mapped to green to preserve existing layout logic) */
+  --color-green-900: #7c2d12;
+  --color-green-800: #9a3412;
+  --color-green-700: #c2410c;
+  --color-green-600: #ea580c;
+  --color-green-500: #ff7a18;
+  --color-green-400: #fb923c;
+  --color-green-300: #fdba74;
+  --color-green-200: #fed7aa;
+  --color-green-100: #ffedd5;
+  --color-green-50: #fff7ed;
+
+  /* Neutrals - Slate Scale */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  
+  --color-hero-bg: #f8fafc;
+  --color-dark-bg: #0f172a;
+  
+  --color-verified: #10b981;
+  --color-unverified: #ef4444;
+  --color-badge-blue: #3b82f6;
+  
+  --color-tag-bg: #f1f5f9;
+  --color-tag-text: #475569;
+
+  /* Shadows mapped from provided HTML */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+
+  /* Animations */
+  --animate-fade-up: fadeUp 0.7s ease both;
+  
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Loader Animations */
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.loader-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.loader-arc {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  animation: spin var(--duration) linear infinite;
+}
+
+.arc-1 {
+  width: 100%;
+  height: 100%;
+  border-top-color: #ff7a18;
+  --duration: 1.2s;
+}
+
+.arc-2 {
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  border-bottom-color: #fb923c;
+  --duration: 0.9s;
+  animation-direction: reverse;
+}
+
+.arc-3 {
+  width: 40%;
+  height: 40%;
+  top: 30%;
+  left: 30%;
+  border-left-color: #ff7a18;
+  --duration: 0.6s;
 }

@@ -11,87 +11,69 @@ interface Props {
 export default function CommunityContent({ listings }: Props) {
   return (
     <>
-      <section className="hero">
-        <div className="hero-eyebrow">
-          <span className="eyebrow-dot" />
-          Recruiter &amp; Agency Marketplace
+      <header className="bg-surface-container-low pt-16 pb-24 px-4 md:px-8 text-center border-b border-outline-variant/5 overflow-hidden relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full opacity-10 pointer-events-none">
+           <span className="material-symbols-outlined text-[400px] text-primary absolute -top-40 -left-20 rotate-12">hub</span>
+           <span className="material-symbols-outlined text-[300px] text-secondary absolute -bottom-20 -right-20 -rotate-12">diversity_3</span>
         </div>
-        <h1 className="hero-title">
-          Find Trusted{" "}
-          <span className="hero-highlight">Recruiters &amp; Agencies</span>
-          {" "}in One Place
-        </h1>
-        <p className="hero-sub">
-          Discover trusted recruitment professionals and agencies powered by Candexa AI.
-        </p>
-        <div className="hero-actions">
-          <Link href="/community/submit" className="btn-primary">
-            Submit Your Profile
-          </Link>
-          <a href="#listings" className="btn-ghost">
-            Browse {listings.length} Listing{listings.length !== 1 ? "s" : ""}
-          </a>
-        </div>
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="flex justify-center mb-6">
+            <div className="p-3 bg-secondary/10 rounded-2xl text-secondary animate-bounce">
+              <span className="material-symbols-outlined text-3xl">domain_verification</span>
+            </div>
+          </div>
+          <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-6 leading-[1.1] tracking-tight">
+            Search Trusted Recruitment & HR Agencies Worldwide
+          </h1>
+          <p className="text-on-surface-variant text-lg max-w-2xl mx-auto mb-10 font-medium">
+            A vetted ecosystem of high-performing talent partners, curated for professional gravitas and exceptional results.
+          </p>
 
-        <div className="stats-row">
-          <div className="stat">
-            <span className="stat-num">{listings.length}</span>
-            <span className="stat-label">Profiles Listed</span>
+          <div className="bg-white p-3 rounded-2xl shadow-[0px_32px_64px_-12px_rgba(1,45,29,0.14)] flex flex-col md:flex-row items-center gap-2 max-w-5xl mx-auto border border-outline-variant/20 group">
+            <div className="flex-1 flex items-center px-4 gap-3 w-full border-r border-outline-variant/10 focus-within:bg-surface-container-low transition-colors rounded-xl">
+              <span className="material-symbols-outlined text-primary/40">search</span>
+              <input type="text" placeholder="Agency Name" className="w-full bg-transparent border-none focus:ring-0 text-on-surface font-semibold py-4 placeholder:text-primary/30" />
+            </div>
+            <div className="flex-1 flex items-center px-4 gap-3 w-full border-r border-outline-variant/10 focus-within:bg-surface-container-low transition-colors rounded-xl">
+              <span className="material-symbols-outlined text-primary/40">location_on</span>
+              <input type="text" placeholder="Location" className="w-full bg-transparent border-none focus:ring-0 text-on-surface font-semibold py-4 placeholder:text-primary/30" />
+            </div>
+            <div className="flex-1 flex items-center px-4 gap-3 w-full focus-within:bg-surface-container-low transition-colors rounded-xl">
+              <span className="material-symbols-outlined text-primary/40">work</span>
+              <select className="w-full bg-transparent border-none focus:ring-0 text-on-surface font-semibold py-4 appearance-none cursor-pointer">
+                <option>Service Type</option>
+                <option>Executive Search</option>
+                <option>Technical Staffing</option>
+              </select>
+            </div>
+            <button className="w-full md:w-auto bg-primary text-white px-10 py-4 rounded-xl font-bold hover:bg-secondary transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95">
+              Search
+              <span className="material-symbols-outlined text-xl">search</span>
+            </button>
           </div>
-          <div className="stat-divider" />
-          <div className="stat">
-            <span className="stat-num">Free</span>
-            <span className="stat-label">To List Now</span>
-          </div>
-          <div className="stat-divider" />
-          <div className="stat">
-            <span className="stat-num">0</span>
-            <span className="stat-label">Verified Soon</span>
-          </div>
+        </div>
+      </header>
+
+      <div className="bg-surface">
+        <ListingsGrid listings={listings} />
+      </div>
+
+      <section className="editorial-gradient py-24 md:py-32 px-4 md:px-8 text-center text-white relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <h2 className="font-headline text-3xl md:text-5xl font-extrabold mb-8 tracking-tight">Are You a Recruitment or Staffing Agency Owner?</h2>
+          <p className="text-on-primary-container text-xl mb-12 max-w-2xl mx-auto font-medium opacity-80">
+            Put your agency in front of decision-makers worldwide. Join our curated network today.
+          </p>
+          <Link 
+            href="/community/submit" 
+            className="bg-white text-primary font-extrabold px-16 py-6 rounded-3xl text-xl hover:bg-surface-container transition-all shadow-2xl flex items-center justify-center gap-4 mx-auto group active:scale-95 inline-flex"
+          >
+            Register Your Agency
+            <span className="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+          </Link>
         </div>
       </section>
-
-      <ListingsGrid listings={listings} />
-
-      <section className="footer-cta">
-        <div className="footer-cta-inner">
-          <h2>Ready to get listed?</h2>
-          <p>It&apos;s free. Takes 2 minutes. No account required.</p>
-          <Link href="/community/submit" className="btn-primary-white">
-            Submit Your Profile
-          </Link>
-        </div>
-      </section>
-
-      <style jsx>{`
-        .hero { max-width: 900px; margin: 0 auto; padding: 80px 24px 64px; text-align: center; }
-        .hero-eyebrow {
-          display: inline-flex; align-items: center; gap: 8px;
-          background: #fff7ed; border: 1px solid #fed7aa; color: #ea580c;
-          border-radius: 100px; padding: 6px 16px; font-size: 13px; font-weight: 600; margin-bottom: 28px;
-        }
-        .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: #ff823c; display: inline-block; }
-        .hero-title { font-size: clamp(32px, 5vw, 54px); font-weight: 600; color: #1a1a1a; line-height: 1.15; letter-spacing: -1px; margin: 0 0 20px; }
-        .hero-highlight { color: #ff823c; }
-        .hero-sub { font-size: 18px; color: #6b7280; line-height: 1.65; max-width: 600px; margin: 0 auto 36px; }
-        .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
-        .btn-primary { background: #ff823c; color: white; padding: 16px 40px; border-radius: 32px; font-weight: 600; font-size: 16px; text-decoration: none; transition: background 0.15s; box-shadow: 0 4px 14px rgba(255,130,60,0.3); }
-        .btn-primary:hover { background: #ff823c/90; }
-        .btn-ghost { background: transparent; color: #1a1a1a; padding: 16px 32px; border-radius: 32px; font-weight: 600; font-size: 16px; text-decoration: none; border: 1px solid #e5e7eb; transition: border-color 0.15s; }
-        .btn-ghost:hover { border-color: #d1d5db; }
-        .stats-row { display: inline-flex; align-items: center; gap: 32px; background: white; border: 1px solid #f0f0f0; border-radius: 14px; padding: 20px 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
-        .stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-        .stat-num { font-size: 22px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; }
-        .stat-label { font-size: 12px; color: #9ca3af; font-weight: 500; }
-        .stat-divider { width: 1px; height: 36px; background: #f0f0f0; }
-        .footer-cta { background: #1a1a1a; padding: 64px 24px; text-align: center; }
-        .footer-cta-inner { max-width: 500px; margin: 0 auto; }
-        .footer-cta h2 { font-size: 28px; font-weight: 600; color: white; margin: 0 0 12px; letter-spacing: -0.5px; }
-        .footer-cta p { color: #9ca3af; font-size: 15px; margin: 0 0 28px; }
-        .btn-primary-white { background: white; color: #1a1a1a; padding: 16px 40px; border-radius: 32px; font-weight: 600; font-size: 16px; text-decoration: none; transition: background 0.15s; }
-        .btn-primary-white:hover { background: #f3f4f6; }
-        @media (max-width: 640px) { .stats-row { gap: 20px; padding: 16px 24px; } }
-      `}</style>
     </>
   );
 }
