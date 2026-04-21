@@ -17,7 +17,7 @@ const dmSerifDisplay = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Candexa AI – Search Trusted Recruitment & HR Agencies Worldwide",
+  title: "Candexa Market Place",
   description: "Search Trusted Recruitment & HR Agencies Worldwide. Find the right hiring, staffing, and HR partners — faster, smarter, and globally.",
   icons: [{ url: "/favicon.ico" }],
 };

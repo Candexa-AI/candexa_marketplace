@@ -23,7 +23,7 @@ export default function Footer() {
             <li><Link href="#" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">HR Brand Card</Link></li>
             <li><Link href="#" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Certifications</Link></li>
             <li><Link href="#" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Gigs</Link></li>
-            <li><Link href="/agency-marketplace" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Agency Marketplace</Link></li>
+            <li><Link href="/" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Agency Marketplace</Link></li>
             <li><Link href="#" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Solution Marketplace</Link></li>
             <li><Link href="#" className="text-[13.5px] text-white/60 hover:text-[#ff7a18] transition-colors no-underline">Events</Link></li>
           </ul>
