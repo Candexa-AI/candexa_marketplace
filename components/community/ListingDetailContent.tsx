@@ -26,352 +26,160 @@ function formatDate(dateStr: string): string {
 
 export default function ListingDetailContent({ listing }: Props) {
   return (
-    <main className="page-root">
-      <div className="content">
-        <div className="layout">
-          <article className="profile-card">
-            <div className="profile-header">
-              <div className="avatar-lg">{getInitials(listing.name)}</div>
-              <div className="profile-meta">
-                <div className="profile-name-row">
-                  <h1 className="agency-name">{listing.agencyName}</h1>
-                  <span className="badge-unverified">Unverified</span>
-                </div>
-                <p className="recruiter-name">{listing.name}</p>
-                {listing.niche && (
-                  <div className="niche-tag">{listing.niche}</div>
-                )}
+    <main className="bg-surface min-h-screen">
+      {/* Premium Profile Header */}
+      <div className="bg-surface-container-low pt-24 pb-48 px-4 md:px-8 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-full opacity-5 pointer-events-none">
+           <span className="material-symbols-outlined text-[400px] text-primary absolute -top-40 -left-20 rotate-12">badge</span>
+           <span className="material-symbols-outlined text-[300px] text-secondary absolute -bottom-20 -right-20 -rotate-12">verified</span>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <Link href="/community" className="inline-flex items-center gap-2 text-primary/40 hover:text-primary font-bold text-sm mb-12 transition-all group">
+            <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Back to Marketplace
+          </Link>
+          
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-10">
+            <div className="w-40 h-40 rounded-[40px] bg-white shadow-2xl flex items-center justify-center p-8 border border-outline-variant/10 relative">
+               <span className="text-5xl font-extrabold text-primary">{getInitials(listing.agencyName || listing.name)}</span>
+               {listing.isVerified && (
+                 <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-secondary rounded-2xl flex items-center justify-center text-white shadow-lg border-4 border-white">
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                 </div>
+               )}
+            </div>
+            
+            <div className="text-center md:text-left flex-1">
+              <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 mb-4">
+                 <h1 className="font-headline text-4xl md:text-5xl font-extrabold text-primary tracking-tight">{listing.agencyName}</h1>
+                 {listing.isVerified ? (
+                   <span className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest border border-secondary/20">
+                     Verified Agency
+                   </span>
+                 ) : (
+                   <span className="bg-primary/5 text-primary/60 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest border border-primary/10">
+                     Featured Community Member
+                   </span>
+                 )}
+              </div>
+              <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 text-on-surface-variant font-medium">
+                 <div className="flex items-center gap-2">
+                   <span className="material-symbols-outlined text-primary/40">person</span>
+                   {listing.name}
+                 </div>
+                 <div className="flex items-center gap-2">
+                   <span className="material-symbols-outlined text-primary/40">category</span>
+                   {listing.niche || "General Recruitment"}
+                 </div>
+                 <div className="flex items-center gap-2">
+                   <span className="material-symbols-outlined text-primary/40">event</span>
+                   Joined {formatDate(listing.createdAt)}
+                 </div>
               </div>
             </div>
 
-            {listing.description && (
-              <section className="profile-section">
-                <h2 className="section-title">About</h2>
-                <p className="description">{listing.description}</p>
-              </section>
-            )}
-
-            <section className="profile-section">
-              <h2 className="section-title">Details</h2>
-              <div className="details-grid">
-                <div className="detail-row">
-                  <span className="detail-label">Agency</span>
-                  <span className="detail-value">{listing.agencyName}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Recruiter</span>
-                  <span className="detail-value">{listing.name}</span>
-                </div>
-                {listing.niche && (
-                  <div className="detail-row">
-                    <span className="detail-label">Niche</span>
-                    <span className="detail-value">{listing.niche}</span>
-                  </div>
-                )}
-                <div className="detail-row">
-                  <span className="detail-label">Listed On</span>
-                  <span className="detail-value">{formatDate(listing.createdAt)}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Verification</span>
-                  <span className="detail-value detail-unverified">
-                    Pending
-                  </span>
-                </div>
-              </div>
-            </section>
-          </article>
-
-          <aside className="sidebar">
-            {listing.website ? (
-              <a
-                href={
-                  listing.website.startsWith("http")
-                    ? listing.website
-                    : `https://${listing.website}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-website"
-              >
-                Visit Website
-              </a>
-            ) : (
-              <div className="no-website-box">No website listed</div>
-            )}
-
-            <div className="sidebar-card">
-              <h3 className="sidebar-title">Verification Status</h3>
-              <div className="verification-status">
-                <div className="status-icon-wrap unverified">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="status-label">Unverified Profile</p>
-                  <p className="status-desc">
-                    This profile has not been reviewed by the Candexa AI team.
-                  </p>
-                </div>
-              </div>
+            <div className="flex gap-4">
+              {listing.website && (
+                <a
+                  href={listing.website.startsWith("http") ? listing.website : `https://${listing.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-primary text-white font-extrabold px-10 py-5 rounded-2xl hover:bg-secondary transition-all shadow-xl shadow-primary/20 flex items-center gap-3 active:scale-95"
+                >
+                  Visit Website
+                  <span className="material-symbols-outlined">open_in_new</span>
+                </a>
+              )}
             </div>
-
-            <div className="sidebar-card">
-              <h3 className="sidebar-title">Are you this recruiter?</h3>
-              <p className="sidebar-desc">
-                Claim and verify your profile to get a trust badge.
-              </p>
-              <span className="coming-soon-pill">Coming Soon</span>
-            </div>
-
-            <Link href="/community" className="btn-back-sidebar">
-              Browse All Listings
-            </Link>
-          </aside>
+          </div>
         </div>
       </div>
 
-      <style jsx>{`
-        .page-root {
-          background: #f9fafb;
-          min-height: 100vh;
-        }
-        .content {
-          max-width: 1000px;
-          margin: 0 auto;
-          padding: 32px 24px 80px;
-        }
-        .back-link {
-          display: inline-block;
-          font-size: 14px;
-          color: #6b7280;
-          text-decoration: none;
-          font-weight: 500;
-          margin-bottom: 28px;
-          transition: color 0.15s;
-        }
-        .back-link:hover { color: #1a1a1a; }
+      <div className="max-w-7xl mx-auto px-4 md:px-8 -mt-24 pb-32 relative z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 space-y-12">
+            {/* About Section */}
+            <div className="bg-white rounded-[40px] p-10 md:p-12 shadow-[0px_32px_64px_-12px_rgba(1,45,29,0.08)] border border-outline-variant/10">
+              <h2 className="font-headline text-2xl font-extrabold text-primary mb-8 flex items-center gap-4">
+                 <span className="w-10 h-10 bg-primary/5 rounded-xl flex items-center justify-center text-primary">
+                   <span className="material-symbols-outlined text-xl">info</span>
+                 </span>
+                 About the Agency
+              </h2>
+              <div className="prose prose-slate max-w-none">
+                <p className="text-on-surface font-medium text-lg leading-relaxed">
+                  {listing.description || "No description provided."}
+                </p>
+              </div>
+            </div>
 
-        .layout {
-          display: grid;
-          grid-template-columns: 1fr 320px;
-          gap: 24px;
-          align-items: start;
-        }
+            {/* Specialties Section */}
+            <div className="bg-white rounded-[40px] p-10 md:p-12 shadow-[0px_32px_64px_-12px_rgba(1,45,29,0.08)] border border-outline-variant/10">
+               <h2 className="font-headline text-2xl font-extrabold text-primary mb-8 flex items-center gap-4">
+                 <span className="w-10 h-10 bg-primary/5 rounded-xl flex items-center justify-center text-primary">
+                   <span className="material-symbols-outlined text-xl">target</span>
+                 </span>
+                 Expertise & Focus
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 {[
+                   { label: "Main Niche", value: listing.niche || "General", icon: "category" },
+                   { label: "Account Lead", value: listing.name, icon: "person" },
+                   { label: "Status", value: listing.isVerified ? "Vetted" : "Self-Reported", icon: "verified" },
+                   { label: "Member Since", value: formatDate(listing.createdAt), icon: "calendar_month" }
+                 ].map((item, i) => (
+                   <div key={i} className="flex items-center gap-4 p-6 bg-surface-container-low/50 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
+                         <span className="material-symbols-outlined">{item.icon}</span>
+                      </div>
+                      <div>
+                         <p className="text-[10px] font-extrabold uppercase tracking-widest text-primary/40 mb-0.5">{item.label}</p>
+                         <p className="font-bold text-primary">{item.value}</p>
+                      </div>
+                   </div>
+                 ))}
+              </div>
+            </div>
+          </div>
 
-        .profile-card {
-          background: white;
-          border: 1px solid #f3f4f6;
-          border-radius: 32px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-          overflow: hidden;
-        }
-        .profile-header {
-          display: flex;
-          gap: 24px;
-          align-items: flex-start;
-          padding: 40px;
-          border-bottom: 1px solid #f3f4f6;
-        }
-        .avatar-lg {
-          width: 80px;
-          height: 80px;
-          background: linear-gradient(135deg, #ff823c, #ff6a1a);
-          border-radius: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 24px;
-          font-weight: 600;
-          flex-shrink: 0;
-        }
-        .profile-meta { flex: 1; }
-        .profile-name-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex-wrap: wrap;
-          margin-bottom: 8px;
-        }
-        .agency-name {
-          font-size: 28px;
-          font-weight: 600;
-          color: #1a1a1a;
-          margin: 0;
-        }
-        .badge-unverified {
-          background: #fef3c7;
-          color: #b45309;
-          border: 1px solid #fde68a;
-          border-radius: 20px;
-          padding: 4px 14px;
-          font-size: 12px;
-          font-weight: 600;
-          white-space: nowrap;
-        }
-        .recruiter-name {
-          font-size: 15px;
-          color: #6b7280;
-          margin: 0 0 16px;
-        }
-        .niche-tag {
-          display: inline-flex;
-          background: #fff7ed;
-          border: 1px solid #fed7aa;
-          border-radius: 20px;
-          padding: 6px 16px;
-          font-size: 14px;
-          color: #ea580c;
-          font-weight: 500;
-        }
+          <aside className="space-y-8">
+             {/* Methodology / Trust Box */}
+            <div className="bg-primary rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl shadow-primary/20">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+               <h3 className="font-headline text-2xl font-extrabold mb-6">NextinHR Vetting</h3>
+               <p className="text-on-primary-container font-medium mb-10 leading-relaxed opacity-80">
+                 Our Curated Institution methodology ensures high standards of transparency and results across our global marketplace.
+               </p>
+               <ul className="space-y-4 mb-10">
+                 {[ "Identity Verification", "Performance Review", "Client Feedback", "Strategic Alignment" ].map((check, i) => (
+                   <li key={i} className="flex items-center gap-3 font-bold text-sm">
+                      <span className="material-symbols-outlined text-secondary-fixed text-lg">check_circle</span>
+                      {check}
+                   </li>
+                 ))}
+               </ul>
+               <button className="w-full bg-white text-primary font-extrabold py-4 rounded-2xl hover:bg-surface-container transition-all text-sm uppercase tracking-widest active:scale-95">
+                 Learn More
+               </button>
+            </div>
 
-        .profile-section {
-          padding: 32px 40px;
-          border-bottom: 1px solid #f3f4f6;
-        }
-        .profile-section:last-child { border-bottom: none; }
-        .section-title {
-          font-size: 12px;
-          font-weight: 600;
-          color: #9ca3af;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          margin: 0 0 16px;
-        }
-        .description {
-          font-size: 15px;
-          color: #374151;
-          line-height: 1.7;
-          margin: 0;
-        }
-
-        .details-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
-        .detail-row {
-          display: flex;
-          align-items: baseline;
-          gap: 16px;
-        }
-        .detail-label {
-          font-size: 14px;
-          font-weight: 500;
-          color: #9ca3af;
-          min-width: 100px;
-        }
-        .detail-value {
-          font-size: 14px;
-          color: #1a1a1a;
-        }
-        .detail-unverified { color: #b45309; }
-
-        .sidebar {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          position: sticky;
-          top: 84px;
-        }
-        .btn-website {
-          display: block;
-          background: #ff823c;
-          color: white;
-          text-align: center;
-          padding: 16px;
-          border-radius: 24px;
-          font-weight: 600;
-          font-size: 15px;
-          text-decoration: none;
-          transition: background 0.15s;
-        }
-        .btn-website:hover { background: #ff6b2c; }
-        .no-website-box {
-          text-align: center;
-          padding: 16px;
-          border-radius: 24px;
-          border: 1px dashed #e5e7eb;
-          font-size: 14px;
-          color: #9ca3af;
-        }
-        .sidebar-card {
-          background: white;
-          border: 1px solid #f3f4f6;
-          border-radius: 24px;
-          padding: 24px;
-        }
-        .sidebar-title {
-          font-size: 14px;
-          font-weight: 600;
-          color: #1a1a1a;
-          margin: 0 0 16px;
-        }
-        .verification-status {
-          display: flex;
-          gap: 14px;
-          align-items: flex-start;
-        }
-        .status-icon-wrap {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          color: #f59e0b;
-        }
-        .status-icon-wrap.unverified { background: #fef3c7; }
-        .status-label {
-          font-size: 14px;
-          font-weight: 600;
-          color: #1a1a1a;
-          margin: 0 0 4px;
-        }
-        .status-desc {
-          font-size: 13px;
-          color: #6b7280;
-          line-height: 1.5;
-          margin: 0;
-        }
-        .sidebar-desc {
-          font-size: 13px;
-          color: #6b7280;
-          line-height: 1.5;
-          margin: 0 0 16px;
-        }
-        .coming-soon-pill {
-          display: inline-block;
-          background: #f3f4f6;
-          color: #6b7280;
-          border-radius: 20px;
-          padding: 6px 14px;
-          font-size: 12px;
-          font-weight: 600;
-        }
-        .btn-back-sidebar {
-          display: block;
-          text-align: center;
-          font-size: 14px;
-          font-weight: 500;
-          color: #6b7280;
-          text-decoration: none;
-          padding: 14px;
-          border: 1px solid #e5e7eb;
-          border-radius: 24px;
-          transition: border-color 0.15s;
-        }
-        .btn-back-sidebar:hover { border-color: #d1d5db; color: #1a1a1a; }
-
-        @media (max-width: 768px) {
-          .layout { grid-template-columns: 1fr; }
-          .sidebar { position: static; }
-          .profile-header { flex-direction: column; padding: 24px; }
-        }
-      `}</style>
+            {/* Sidebar CTA */}
+            <div className="bg-white rounded-[40px] p-10 shadow-[0px_32px_64px_-12px_rgba(1,45,29,0.08)] border border-outline-variant/10 text-center">
+               <div className="w-20 h-20 bg-secondary/10 rounded-3xl flex items-center justify-center text-secondary mx-auto mb-6">
+                 <span className="material-symbols-outlined text-4xl">contact_support</span>
+               </div>
+               <h3 className="font-headline text-xl font-extrabold text-primary mb-4">Need Help Hiring?</h3>
+               <p className="text-on-surface-variant font-medium text-sm mb-8 leading-relaxed">
+                 Let our consultants help you find the perfect agency partner for your specific needs.
+               </p>
+               <button className="w-full border-2 border-primary/10 text-primary font-extrabold py-4 rounded-2xl hover:bg-primary hover:text-white transition-all text-sm uppercase tracking-widest">
+                 Consult an Expert
+               </button>
+            </div>
+          </aside>
+        </div>
+      </div>
     </main>
   );
 }

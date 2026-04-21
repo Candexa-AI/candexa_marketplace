@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
+import ChatBot from "@/components/shared/ChatBot";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-dm-sans",
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-dm-serif",
 });
 
 export const metadata: Metadata = {
-  title: "Candexa AI - Recruiter & Agency Marketplace",
-  description: "A growing community of talent professionals powered by Candexa AI.",
+  title: "Candexa AI – Search Trusted Recruitment & HR Agencies Worldwide",
+  description: "Search Trusted Recruitment & HR Agencies Worldwide. Find the right hiring, staffing, and HR partners — faster, smarter, and globally.",
   icons: [{ url: "/favicon.ico" }],
 };
 
@@ -19,8 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={dmSans.className}>{children}</body>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${dmSans.variable} ${dmSerifDisplay.variable} font-sans antialiased text-[#1a2e22] bg-white min-h-screen overflow-x-hidden`}>
+        {children}
+        <ChatBot />
+      </body>
     </html>
   );
 }
